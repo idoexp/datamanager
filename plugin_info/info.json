@@ -17,7 +17,7 @@
 	"changelog" : "https://github.com/idoexp/datamanager#changelog",
 	"documentation" : "https://github.com/idoexp/datamanager#fronius-datamanager-pour-jeedom",
 	"link" : {
-		"forum":"https://community.jeedom.com/t/plugin-fronius-datamanager/",
+		"forum":"https://community.jeedom.com/t/plugin-recuperation-des-donnees-de-productions-solaire-dune-installation-fronius/110533",
 		"video" : "Lien vers une video"
 	},
 	"language": [
