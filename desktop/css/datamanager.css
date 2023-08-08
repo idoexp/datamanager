@@ -1,0 +1,183 @@
+
+* {
+  --houseColor:#25b2e8;
+  --sunColor:#fed308;
+  --gridColor:#d1d3d3;
+  --insideColor:#fff;
+  --resellColor:#47ac34;
+}
+
+.fronius {
+  height: 170px;
+  width: 170px;
+  position: relative;
+  box-sizing: border-box;
+}
+.fronius .icon {
+  position: absolute;
+  z-index: 100;
+  width: 80px;
+  height: 80px;
+  border: solid 1px var(--houseColor);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  grid-gap: 4px;
+}
+.fronius .icon svg {
+  width: 28px;
+  height: auto;
+}
+.fronius .icon.sun {
+  border-color: var(--sunColor);
+}
+.fronius .icon.grid {
+  border-color: var(--gridColor);
+}
+.fronius .icon.house {
+  border-color: var(--houseColor);
+}
+.fronius .sun .dots,
+.fronius .house .dots {
+  /*M 1 1 C 3 1 4 2 4 4 M 4 4*/
+  content: "";
+  position: absolute;
+  offset-path: path("m.19,26.67C21.82,35.73,54.12,19.16,54.12,0");
+  opacity: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--houseColor);
+}
+.fronius .animated .dots {
+  animation: sunToHouse 1000ms infinite ease-in-out;
+}
+.fronius .animated.house .dots {
+  animation: houseToGrid 1000ms infinite ease-in-out;
+}
+.fronius .animated .dots:nth-child(2) {
+  animation-delay: 333ms;
+}
+.fronius .animated .dots:nth-child(3) {
+  animation-delay: 666ms;
+}
+.fronius .animated.reverse .dots {
+  animation-direction: reverse;
+}
+.fronius .sun .dots {
+  right: -5px;
+  top: 10px;
+  background: var(--sunColor);
+  offset-path: path("m.19,3.05c21.63-9.06,53.93,7.51,53.93,26.67");
+}
+.fronius .consoTxt {
+  font-size: 12px;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+.fronius .sun {
+  color: var(--insideColor);
+  top: 0;
+  left: 0;
+}
+.fronius .sun .consoTxt {
+  bottom: -24px;
+  left: 10px;
+}
+.fronius .house {
+  color: var(--insideColor);
+  top: calc(50% - 30px);
+  right: 0px;
+  top: calc(50% - 40px);
+}
+.fronius .house .dots {
+  left: -16px;
+  bottom: -6px;
+}
+.fronius .house .consoTxt {
+  text-align: right;
+  left: -40px;
+  top: 15px;
+}
+.fronius .grid {
+  bottom: 0px;
+  left: 0px;
+  color: var(--insideColor);
+}
+.fronius .grid .consoTxt {
+  top: -20px;
+  left: 10px;
+}
+
+@keyframes sunToHouse {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+    background-color: var(--sunColor);
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    background: var(--houseColor);
+    offset-distance: 100%;
+  }
+}
+@keyframes houseToGrid {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+    background: var(--gridColor);
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    offset-distance: 100%;
+    background-color: var(--houseColor);
+  }
+}
+.consos {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  grid-gap: 8px;
+  max-width: 170px;
+}
+.consos div {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.consos div span {
+  font-weight: bold;
+}
+.consos sup {
+  opacity: 0.3;
+  margin-left: 4px;
+}
+.consos .production span {
+  color: var(--sunColor) !important;
+}
+.consos .autoconso span {
+  color: var(--houseColor) !important;
+}
+.consos .revente span {
+  color: var(--resellColor) !important;
+}  
