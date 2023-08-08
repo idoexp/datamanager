@@ -1,11 +1,31 @@
-# Template de plugin pour Jeedom
+# Fronius DataManager & Smartmeter pour Jeedom
 
-Ce "template de plugin" sert de base à la réalisation de plugins pour **Jeedom**.
+Ce plugin Jeedom, va récupérer les informations sur les votre onduleur Fronius. Il récupère également les informations du smartmeter afin d'afficher la production solaire jounalière ainsi que la consomation instantanée de la maison.
 
-La documentation générale relative à la conception de plugin est consultable [ici](https://doc.jeedom.com/fr_FR/dev/). Dans le détail :   
-* [Utilisation du template de plugin](https://doc.jeedom.com/fr_FR/dev/plugin_template) : Le template de plugin est une base de plugin pour Jeedom qui doit être adaptée avec l'id de votre plugin et à laquelle il suffit d'ajouter vos propres fonctions. 
-* [Fichier info.json](https://doc.jeedom.com/fr_FR/dev/structure_info_json) : Intégré depuis la version 3.0 de Jeedom, le fichier **info.json** est obligatoire pour le bon fonctionnement des plugins et leur bon déploiement sur le Market Jeedom.
-* [Icône du plugin](https://doc.jeedom.com/fr_FR/dev/Icone_de_plugin) : Afin de pouvoir être publié sur le Market Jeedom, tout plugin doit disposer d’une icône. Attention à ne pas utiliser le même code couleur que les icônes des plugins Jeedom officiels.
-* [Widget du plugin](https://doc.jeedom.com/fr_FR/dev/widget_plugin) : Présentation des différentes manières d'inclure des widgets personnalisés au plugin.
-* [Documentation du plugin](https://doc.jeedom.com/fr_FR/dev/documentation_plugin) : Présentation de la mise en place d'une documentation car un bon plugin n'est rien sans documentation adéquate.
-* [Publication du plugin](https://doc.jeedom.com/fr_FR/dev/publication_plugin) : Description des pré-requis indispensables à la publication du plugin.
+Vous pouvez visualiser le widget d'affichage https://codepen.io/idoExperiences/pen/vYQMQZN
+
+Compatible pour **Jeedom** 4.2
+
+# Installation du plugin
+
+Utilisez le market de **Jeedom** pour télécharger et installer le plugins.
+Ou téléchargez le zip, et copier son contenue dans le dossier **/var/www/html/plugins/datamanager** de votre machine (sous linux)
+
+# Activation du plugin
+
+* **Activer** le plugin
+Renseignez l'adresse ip de votre onduleur ainsi que la puissance maximale de votre installation (en Warr Crête)
+
+# Création d'un équipement
+
+* Allez dans les plugins > energie > **Fronius Datamanager**
+* Cliquez ensuite sur **Ajouter**
+* Nommez l'équipement, par exeple **Fronius** et faite **ok**
+
+L'équipement est créé et actif, il vous reste plus qu'à le positionner dans votre environnement, par défaut il est dans la rubrique **aucun**
+A partir du moment où l'équipement est activé il récupère les informations de l'onduleur toutes les minutes.
+Toutes les valeurs exprimé en kWh (kilowattheure) excepté la production journalière, sont calculés à partir du moment où l'équipement est actif. Il est donc possible que les premières données relevés ne correspondent pas à la réalité.
+Par ailleurs le raffraichissement ayant lieu toutes les minutes il est possible que vous ayez un décalage de quelques watts par rapport à votre fournisseur d'électricité ou l'application solar.web.
+
+# changelog
+* Mise à jour le 8 août 2023.
