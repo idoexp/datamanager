@@ -2,8 +2,9 @@
 	"id" : "datamanager",
 	"name" : "Fronius Datamanager",
 	"description" : {
-		"fr_FR": "Récupération des données du datamanager de Fronius et du Smartmeter"
+		"fr_FR": "Récupération des données du Datamanager 2.0 de Fronius et du Smart Meter"
 	},
+	"utilization": "Installez le plugin, activez le. Créez un équipement, indiquez son adresse IP et sauvegardez. ",
 	"link": {
 		"forum": "https://community.jeedom.com/tag/plugin-edf_tempo"
 	},

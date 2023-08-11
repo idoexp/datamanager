@@ -125,6 +125,41 @@ $eqLogics = eqLogic::byType($plugin->getId());
 									<label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked>{{Visible}}</label>
 								</div>
 							</div>
+							<legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
+								<div class="form-group">
+									<label class="col-sm-4 control-label" >{{Protocole d'accès}}</label>
+									<div class="col-sm-2">
+										<select id="protocole" class="eqLogicAttr form-control" data-l1key="datamanager_protocole">
+											<option value="http">http</option>
+											<option value="https">https</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">{{Adresse de l'onduleur}}
+										<sup><i class="fas fa-question-circle tooltips" title="{{Indiquez l'adresse ip ou l'url d'accès à votre onduleur}}"></i></sup>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datamanager_ip" placeholder="{{Adresse IP ou mon_domaine_vers_fronius.com}}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">{{Port}}
+										<sup><i class="fas fa-question-circle tooltips" title="{{Indiquez le port d'accès}}"></i></sup>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datamanager_port" placeholder="{{80 est le port par défaut}}">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">{{Puissance de l'installation}}
+										<sup><i class="fas fa-question-circle tooltips" title="{{Indiquez la puissance en Watt Crête de votre installation}}"></i></sup>
+									</label>
+									<div class="col-sm-4">
+										<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datamanager_puissance" placeholder="{{Puissance de l'installation en Wc}}">
+									</div>
+								</div>
+
 						</div>
 
 						<!-- Partie droite de l'onglet "Équipement" -->

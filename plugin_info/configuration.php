@@ -21,7 +21,8 @@ if (!isConnect()) {
   include_file('desktop', '404', 'php');
   die();
 }
-?>
+/*
+<!--
 <form class="form-horizontal">
     <div class="form-group">
       <label class="col-md-4 control-label">{{Adresse IP de l'onduleur Fronius}}
@@ -41,3 +42,6 @@ if (!isConnect()) {
     </div>
 
 </form>
+-->
+*/
+?>
