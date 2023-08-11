@@ -570,6 +570,7 @@ class datamanager extends eqLogic {
   }
 
   public function getJson($url){
+    log::add('datamanager', 'debug', "fonction getJson");
     $opts = array(
       'http'=>array(
         'method'=>"GET",
@@ -581,7 +582,7 @@ class datamanager extends eqLogic {
     );
     $context  = stream_context_create($opts);
     $string   = file_get_contents($url, false, $context);
-    log::add('datamanager', 'info', $string);
+    log::add('datamanager', 'debug', $string);
     $retour   = json_decode($string);
 // $retour =  json_encode($retour->Body->Data->PAC->Value);
     return $retour;    
