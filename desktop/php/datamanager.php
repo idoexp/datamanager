@@ -148,7 +148,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 										<sup><i class="fas fa-question-circle tooltips" title="{{Indiquez le port d'accès}}"></i></sup>
 									</label>
 									<div class="col-sm-4">
-										<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datamanager_port" placeholder="{{80 est le port par défaut}}">
+										<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datamanager_port" placeholder="{{facultatif}}">
 									</div>
 								</div>
 								<div class="form-group">
