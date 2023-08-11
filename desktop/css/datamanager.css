@@ -20,7 +20,7 @@
   height: 80px;
   border: solid 1px var(--houseColor);
   border-radius: 50%;
-  color: white;
+  //color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
