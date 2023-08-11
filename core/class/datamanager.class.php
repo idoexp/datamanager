@@ -223,8 +223,8 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setOrder(5);
     $info->setIsHistorized(1);
-    $info->setConfiguration("minValue", 0);
-    $info->setConfiguration("maxValue", config::byKey('global_fronius_wc', 'datamanager'));
+    // $info->setConfiguration("minValue", 0);
+    // $info->setConfiguration("maxValue", config::byKey('global_fronius_wc', 'datamanager'));
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_day_energy');
@@ -532,10 +532,19 @@ class datamanager extends eqLogic {
   }
 
 
+  public function getEndpoint(){
+      $protocole    = $this->getConfiguration('datamanager_protocole') == "http" ? "http://" : "http://";
+      $port         = $this->getConfiguration('datamanager_port');
+      $port         = isset($port) && !empty($port) ? ":".$port : "";
+      $url            = $protocole . $this->getConfiguration('datamanager_ip').$port;
+      // log::add('datamanager', 'info', "Url d'accès : ".$url);
+      return $url;
+  }
 
   public function getGetInverterRealtimeData(){
-    $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
-    $urlApi = "http://$global_fronius_ip/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceId=1&DataCollection=CommonInverterData";
+    $urlEndpoint = $this->getEndpoint();
+    // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
+    $urlApi = $urlEndpoint."/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceId=1&DataCollection=CommonInverterData";
     $InverterRealtimeData = $this->getJson($urlApi);
     log::add('datamanager', 'info', "Récupération des informations");
     if($InverterRealtimeData === false){
@@ -546,8 +555,9 @@ class datamanager extends eqLogic {
   }
 
   public function getGetMeterRealtimeData(){
-    $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
-    $urlApi = "http://$global_fronius_ip/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System";
+    $urlEndpoint = $this->getEndpoint();
+    // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
+    $urlApi = $urlEndpoint."/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System";
     $GetMeterRealtimeData = $this->getJson($urlApi);
     log::add('datamanager', 'info', "Récupération des informations du SmartMeter");
     if($GetMeterRealtimeData === false){
@@ -592,7 +602,10 @@ class datamanager extends eqLogic {
       'daily_cumulativeExport',
       'daily_autoconsomation'
     );
+
     $replace["#reverseWay#"] = $replace["#animated_solar#"] = "";
+    $replace["#sunCurrentSpeed#"] = $replace["#houseCurrentSpeed#"] =0;
+    $solarProductionW =$solarExport = $consoInstant = 0;
 
     // Parcourir les commandes à remplacer
     foreach ($commandsToReplace as $commandName) {
@@ -600,7 +613,12 @@ class datamanager extends eqLogic {
       if (is_object($cmd) && $cmd->getType() == 'info') {
         $commandValue = $cmd->execCmd();
 
+        if ($commandName == "home_instant_consomation"){
+          $consoInstant = $commandValue;
+        }
+
         if ($commandName == "fronius_powerreal_p_sum"){
+          $solarExport = $commandValue;
           if ($commandValue < 0){
             $replace["#reverseWay#"] = "reverse";
             $commandValue = abs($commandValue);
@@ -609,6 +627,7 @@ class datamanager extends eqLogic {
 
         if ($commandName == "fronius_pac" && $commandValue > 0){
           $replace["#animated_solar#"] = "animated";
+          $solarProductionW = $commandValue;
         }
 
         $w = $this->convertToReadablePower($commandValue);
@@ -618,6 +637,16 @@ class datamanager extends eqLogic {
       } else {
         $replace['#' . $commandName . '#'] = 'Valeur indisponible';
       }
+    }
+
+    // $maxWC =config::byKey('global_fronius_wc', __CLASS__);
+    $maxWC =$this->getConfiguration('datamanager_puissance');
+
+    $replace["#sunCurrentSpeed#"]   = ($solarProductionW * 100 )/ $maxWC;
+    
+    $replace["#houseCurrentSpeed#"] = ($consoInstant * 100 )/ $maxWC;
+    if ($solarExport < 0){
+      $replace["#houseCurrentSpeed#"] = ( ($solarProductionW - $consoInstant) * 100 )/ $maxWC;
     }
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'solar', 'datamanager')));
