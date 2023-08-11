@@ -546,7 +546,8 @@ class datamanager extends eqLogic {
     // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
     $urlApi = $urlEndpoint."/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceId=1&DataCollection=CommonInverterData";
     $InverterRealtimeData = $this->getJson($urlApi);
-    log::add('datamanager', 'info', "Récupération des informations");
+    log::add('datamanager', 'debug', "Récupération des informations");
+    log::add('datamanager', 'debug', "URL : ". $urlApi);
     if($InverterRealtimeData === false){
       // $InverterRealtimeData = json_decode('{"PARAM_NB_J_BLANC":"NA","PARAM_NB_J_ROUGE":"NA","PARAM_NB_J_BLEU":"NA"}');
       log::add('datamanager', 'error', "Erreur de récupération de InverterRealtimeData");
@@ -559,7 +560,8 @@ class datamanager extends eqLogic {
     // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
     $urlApi = $urlEndpoint."/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System";
     $GetMeterRealtimeData = $this->getJson($urlApi);
-    log::add('datamanager', 'info', "Récupération des informations du SmartMeter");
+    log::add('datamanager', 'debug', "Récupération des informations du SmartMeter");
+    log::add('datamanager', 'debug', "URL : ". $urlApi);
     if($GetMeterRealtimeData === false){
       // $GetMeterRealtimeData = json_decode('{"PARAM_NB_J_BLANC":"NA","PARAM_NB_J_ROUGE":"NA","PARAM_NB_J_BLEU":"NA"}');
       log::add('datamanager', 'error', "Erreur de récupération de GetMeterRealtimeData");
