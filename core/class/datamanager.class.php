@@ -592,7 +592,10 @@ class datamanager extends eqLogic {
       'daily_cumulativeExport',
       'daily_autoconsomation'
     );
+
     $replace["#reverseWay#"] = $replace["#animated_solar#"] = "";
+    $replace["#sunCurrentSpeed#"] = $replace["#houseCurrentSpeed#"] =0;
+    $solarProductionW =$solarExport = $consoInstant = 0;
 
     // Parcourir les commandes à remplacer
     foreach ($commandsToReplace as $commandName) {
@@ -600,7 +603,12 @@ class datamanager extends eqLogic {
       if (is_object($cmd) && $cmd->getType() == 'info') {
         $commandValue = $cmd->execCmd();
 
+        if ($commandName == "home_instant_consomation"){
+          $consoInstant = $commandValue;
+        }
+
         if ($commandName == "fronius_powerreal_p_sum"){
+          $solarExport = $commandValue;
           if ($commandValue < 0){
             $replace["#reverseWay#"] = "reverse";
             $commandValue = abs($commandValue);
@@ -609,6 +617,7 @@ class datamanager extends eqLogic {
 
         if ($commandName == "fronius_pac" && $commandValue > 0){
           $replace["#animated_solar#"] = "animated";
+          $solarProductionW = $commandValue;
         }
 
         $w = $this->convertToReadablePower($commandValue);
@@ -618,6 +627,15 @@ class datamanager extends eqLogic {
       } else {
         $replace['#' . $commandName . '#'] = 'Valeur indisponible';
       }
+    }
+
+    $maxWC =config::byKey('global_fronius_wc', __CLASS__);
+
+    $replace["#sunCurrentSpeed#"]   = ($solarProductionW * 100 )/ $maxWC;
+    
+    $replace["#houseCurrentSpeed#"] = ($consoInstant * 100 )/ $maxWC;
+    if ($solarExport < 0){
+      $replace["#houseCurrentSpeed#"] = ( ($solarProductionW - $consoInstant) * 100 )/ $maxWC;
     }
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'solar', 'datamanager')));
