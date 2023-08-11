@@ -30,7 +30,7 @@
   height: 80px;
   border: solid 1px var(--houseColor);
   border-radius: 50%;
-  //color: white;
+/*  color: white;*/
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -100,7 +100,7 @@
   font-weight: bold;
 }
 .fronius .sun {
-  color: var(--insideColor);
+/*  color: var(--insideColor);*/
   top: 0;
   left: 0;
 }
@@ -109,7 +109,7 @@
   left: 10px;
 }
 .fronius .house {
-  color: var(--insideColor);
+/*  color: var(--insideColor);*/
   top: calc(50% - 30px);
   right: 0px;
   top: calc(50% - 40px);
@@ -126,7 +126,7 @@
 .fronius .grid {
   bottom: 0px;
   left: 0px;
-  color: var(--insideColor);
+/*  color: var(--insideColor);*/
 }
 .fronius .grid .consoTxt {
   top: -20px;
