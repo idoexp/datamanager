@@ -570,23 +570,49 @@ class datamanager extends eqLogic {
   }
 
   public function getJson($url){
-    log::add('datamanager', 'debug', "fonction getJson");
-    $opts = array(
-      'http'=>array(
-        'method'=>"GET",
-        'header'=>array( "User-Agent: Wget/1.20.3 (linux-gnu)",
-            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "Content-Type: application/json"
+    if (function_exists('curl_init')) {
+      log::add('datamanager', 'debug', "fonction getJson via -> cUrl");
+      // Utiliser cURL pour récupérer les données
+      $curl           = curl_init();
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_TIMEOUT,        15);
+      curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 15);
+      $data           = curl_exec($curl);
+      $httpRespCode   = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+      log::add('datamanager', 'debug', "Réponse HHTP : ". $httpRespCode);
+      if ($httpRespCode == 0) {
+        log::add('datamanager', 'error', "Impossible de récupérer les données : ". curl_error($curl));
+        return false;
+      }
+  
+    } else {
+  
+      // Utilise file_get_contents pour récupérer les données
+      log::add('datamanager', 'debug', "fonction getJson via -> file_get_contents");
+      $opts = array(
+        'http'=>array(
+          'method'=>"GET",
+          'header'=>array( "User-Agent: Wget/1.20.3 (linux-gnu)",
+              "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+              "Content-Type: application/json"
+          )
         )
-      )
-    );
-    $context  = stream_context_create($opts);
-    $string   = file_get_contents($url, false, $context);
-    log::add('datamanager', 'debug', $string);
-    $retour   = json_decode($string);
-// $retour =  json_encode($retour->Body->Data->PAC->Value);
+      );
+      $context  = stream_context_create($opts);
+      $data     = file_get_contents($url, false, $context);
+      if ($data === false) {
+          log::add('datamanager', 'error', "Impossible de récupérer les données : ". error_get_last()['message']);
+          return false;
+      }    
+    }
+
+    log::add('datamanager', 'debug', "Données récupérées : ". $data);
+    $retour   = json_decode($data);
     return $retour;    
   }
+
 
   public function toHtml($_version = 'dashboard') {
     $replace = $this->preToHtml($_version);
