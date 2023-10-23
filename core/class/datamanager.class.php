@@ -124,7 +124,7 @@ class datamanager extends eqLogic {
     
     $info = $this->getCmd(null, 'home_instant_consomation');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Consomation instantanée", __FILE__));
     }
     $info->setLogicalId('home_instant_consomation');
@@ -139,7 +139,7 @@ class datamanager extends eqLogic {
     
     $info = $this->getCmd(null, 'daily_cumulativeConsumption');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Consomation journalière", __FILE__));
     }
     $info->setLogicalId('daily_cumulativeConsumption');
@@ -154,7 +154,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'daily_cumulativeImport');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Import journalière", __FILE__));
     }
     $info->setLogicalId('daily_cumulativeImport');
@@ -169,7 +169,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'daily_cumulativeExport');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Revente journalière", __FILE__));
     }
     $info->setLogicalId('daily_cumulativeExport');
@@ -184,7 +184,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'daily_autoconsomation');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Autoconsomation journalière", __FILE__));
     }
     $info->setLogicalId('daily_autoconsomation');
@@ -199,7 +199,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'lastRefresh');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("LastRefresh", __FILE__));
     }
     $info->setLogicalId('lastRefresh');
@@ -212,7 +212,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_pac');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Production", __FILE__));
     }
     $info->setLogicalId('fronius_pac');
@@ -229,7 +229,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_day_energy');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Production journalière", __FILE__));
     }
     $info->setLogicalId('fronius_day_energy');
@@ -244,7 +244,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_year_energy');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Production annuelle", __FILE__));
     }
     $info->setLogicalId('fronius_year_energy');
@@ -258,7 +258,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_total_energy');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Production total", __FILE__));
     }
     $info->setLogicalId('fronius_total_energy');
@@ -272,7 +272,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_uac');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("UAC", __FILE__));
     }
     $info->setLogicalId('fronius_uac');
@@ -286,7 +286,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_udc');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("UDC", __FILE__));
     }
     $info->setLogicalId('fronius_udc');
@@ -301,7 +301,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_iac');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("IAC current", __FILE__));
     }
     $info->setLogicalId('fronius_iac');
@@ -315,7 +315,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_idc');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("IDC current", __FILE__));
     }
     $info->setLogicalId('fronius_idc');
@@ -329,7 +329,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_fac');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("Fréquence", __FILE__));
     }
     $info->setLogicalId('fronius_fac');
@@ -343,7 +343,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'fronius_powerreal_p_sum');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("P Sum", __FILE__));
     }
     $info->setLogicalId('fronius_powerreal_p_sum');
@@ -360,7 +360,7 @@ class datamanager extends eqLogic {
 
     $refresh = $this->getCmd(null, 'refresh');
     if (!is_object($refresh)) {
-      $refresh = new edf_tempoCmd();
+      $refresh = new datamanagerCmd();
       $refresh->setName(__('Rafraichir', __FILE__));
     }
     $refresh->setEqLogic_id($this->getId());
@@ -372,7 +372,7 @@ class datamanager extends eqLogic {
 
     $info = $this->getCmd(null, 'debug_json');
     if (!is_object($info)) {
-      $info = new edf_tempoCmd();
+      $info = new datamanagerCmd();
       $info->setName(__("JSON", __FILE__));
     }
     $info->setLogicalId('debug_json');
@@ -546,8 +546,8 @@ class datamanager extends eqLogic {
     // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
     $urlApi = $urlEndpoint."/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceId=1&DataCollection=CommonInverterData";
     $InverterRealtimeData = $this->getJson($urlApi);
-    log::add('datamanager', 'debug', "Récupération des informations");
-    log::add('datamanager', 'debug', "URL : ". $urlApi);
+    // log::add('datamanager', 'debug', "Récupération des informations");
+    // log::add('datamanager', 'debug', "URL : ". $urlApi);
     if($InverterRealtimeData === false){
       // $InverterRealtimeData = json_decode('{"PARAM_NB_J_BLANC":"NA","PARAM_NB_J_ROUGE":"NA","PARAM_NB_J_BLEU":"NA"}');
       log::add('datamanager', 'error', "Erreur de récupération de InverterRealtimeData");
@@ -560,8 +560,8 @@ class datamanager extends eqLogic {
     // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
     $urlApi = $urlEndpoint."/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System";
     $GetMeterRealtimeData = $this->getJson($urlApi);
-    log::add('datamanager', 'debug', "Récupération des informations du SmartMeter");
-    log::add('datamanager', 'debug', "URL : ". $urlApi);
+    // log::add('datamanager', 'debug', "Récupération des informations du SmartMeter");
+    // log::add('datamanager', 'debug', "URL : ". $urlApi);
     if($GetMeterRealtimeData === false){
       // $GetMeterRealtimeData = json_decode('{"PARAM_NB_J_BLANC":"NA","PARAM_NB_J_ROUGE":"NA","PARAM_NB_J_BLEU":"NA"}');
       log::add('datamanager', 'error', "Erreur de récupération de GetMeterRealtimeData");
