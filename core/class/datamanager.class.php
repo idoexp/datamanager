@@ -135,6 +135,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setIsHistorized(1);
     $info->setOrder(1);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
     
     $info = $this->getCmd(null, 'daily_cumulativeConsumption');
@@ -150,6 +153,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(2);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'daily_cumulativeImport');
@@ -165,6 +171,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(3);
+    $info->setDisplay('graphColor', '#999999');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'daily_cumulativeExport');
@@ -180,6 +190,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(3);
+    $info->setDisplay('graphColor', '#47ac34');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'daily_autoconsomation');
@@ -195,6 +209,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(4);
+    $info->setDisplay('graphColor', '#25b2e8');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'lastRefresh');
@@ -223,8 +241,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setOrder(5);
     $info->setIsHistorized(1);
-    // $info->setConfiguration("minValue", 0);
-    // $info->setConfiguration("maxValue", config::byKey('global_fronius_wc', 'datamanager'));
+    $info->setDisplay('graphColor', '#fed308');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_day_energy');
@@ -240,6 +260,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(8);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_year_energy');
@@ -253,7 +276,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('Wh');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(9);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_total_energy');
@@ -267,7 +292,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('Wh');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(10);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_uac');
@@ -281,7 +308,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('V');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(11);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_udc');
@@ -295,7 +324,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('V');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(12);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
 
@@ -310,7 +341,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('A');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(13);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_idc');
@@ -324,7 +357,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('A');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(14);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_fac');
@@ -338,7 +373,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('Hz');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(15);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_powerreal_p_sum');
@@ -354,6 +391,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setIsHistorized(1);
     $info->setOrder(16);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
 
@@ -367,7 +407,7 @@ class datamanager extends eqLogic {
     $refresh->setLogicalId('refresh');
     $refresh->setType('action');
     $refresh->setSubType('other');
-    $info->setOrder(1);
+    $refresh->setOrder(1);
     $refresh->save();  
 
     $info = $this->getCmd(null, 'debug_json');
@@ -458,30 +498,15 @@ class datamanager extends eqLogic {
 
     $currentTimestamp      = time();
 
-    $lastRefresh    = $this->getCmd(null,'lastRefresh')->execCmd();
+    $lastRefresh = (int)$this->getCmd(null,'lastRefresh')->execCmd();
     if ($lastRefresh === 0){
-      $lastRefresh    = time() - 2;
+      $lastRefresh = time() - 2;
     }
 
-    $daily_cumulativeConsumption    = $this->getCmd(null,'daily_cumulativeConsumption')->execCmd();
-    if ($daily_cumulativeConsumption === 0){
-      $daily_cumulativeConsumption    = 0;
-    }
-
-    $daily_cumulativeImport    = $this->getCmd(null,'daily_cumulativeImport')->execCmd();
-    if ($daily_cumulativeImport === 0){
-      $daily_cumulativeImport    = 0;
-    }
-
-    $daily_cumulativeExport    = $this->getCmd(null,'daily_cumulativeExport')->execCmd();
-    if ($daily_cumulativeExport === 0){
-      $daily_cumulativeExport    = 0;
-    }
-    
-    $daily_autoconsomation    = $this->getCmd(null,'daily_autoconsomation')->execCmd();
-    if ($daily_autoconsomation === 0){
-      $daily_autoconsomation    = 0;
-    }
+    $daily_cumulativeConsumption = (float)$this->getCmd(null,'daily_cumulativeConsumption')->execCmd();
+    $daily_cumulativeImport     = (float)$this->getCmd(null,'daily_cumulativeImport')->execCmd();
+    $daily_cumulativeExport     = (float)$this->getCmd(null,'daily_cumulativeExport')->execCmd();
+    $daily_autoconsomation      = (float)$this->getCmd(null,'daily_autoconsomation')->execCmd();
 
     $timeDifference = $currentTimestamp - $lastRefresh;
     // log::add('datamanager', 'info', "Calcul de la conso");
@@ -640,7 +665,7 @@ class datamanager extends eqLogic {
     foreach ($commandsToReplace as $commandName) {
       $cmd = $this->getCmd(null, $commandName);
       if (is_object($cmd) && $cmd->getType() == 'info') {
-        $commandValue = $cmd->execCmd();
+        $commandValue = (float)$cmd->execCmd();
 
         if ($commandName == "home_instant_consomation"){
           $consoInstant = $commandValue;
@@ -662,6 +687,7 @@ class datamanager extends eqLogic {
         $w = $this->convertToReadablePower($commandValue);
         $replace["#".$commandName."_unite#"] = $w['unite'];
         $replace["#".$commandName."#"] = $w['value'];
+        $replace["#".$commandName."_id#"] = $cmd->getId();
 
       } else {
         $replace['#' . $commandName . '#'] = 'Valeur indisponible';
@@ -669,10 +695,13 @@ class datamanager extends eqLogic {
     }
 
     // $maxWC =config::byKey('global_fronius_wc', __CLASS__);
-    $maxWC =$this->getConfiguration('datamanager_puissance');
+    $maxWC = (float)$this->getConfiguration('datamanager_puissance');
+    if ($maxWC <= 0) {
+      $maxWC = 1; // Éviter la division par zéro
+    }
 
     $replace["#sunCurrentSpeed#"]   = ($solarProductionW * 100 )/ $maxWC;
-    
+
     $replace["#houseCurrentSpeed#"] = ($consoInstant * 100 )/ $maxWC;
     if ($solarExport < 0){
       $replace["#houseCurrentSpeed#"] = ( ($solarProductionW - $consoInstant) * 100 )/ $maxWC;
@@ -682,6 +711,7 @@ class datamanager extends eqLogic {
   }
 
   function convertToReadablePower($valueInWatts) {
+      $valueInWatts = (float)$valueInWatts;
       $units = array('W', 'kW', 'MW', 'GW', 'TW', 'PW'); // Unités possibles
       $magnitude = 0;
       while ($valueInWatts >= 1000 && $magnitude < count($units) - 1) {

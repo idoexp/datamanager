@@ -28,4 +28,18 @@ Toutes les valeurs exprimé en kWh (kilowattheure) excepté la production journa
 Par ailleurs le raffraichissement ayant lieu toutes les minutes il est possible que vous ayez un décalage de quelques watts par rapport à votre fournisseur d'électricité ou l'application solar.web.
 
 # changelog
-* Mise à jour le 8 août 2023.
+
+## 8 mars 2026
+* Correction du bug critique cron "Unsupported operand types: int - string" (PHP 8+)
+* Correction des casts manquants sur les valeurs retournées par `execCmd()` (int/float)
+* Correction de `setOrder()` appliqué sur la mauvaise variable dans `postSave()`
+* Protection contre la division par zéro dans le widget
+* Ajout des graphiques d'historique : clic sur le widget ouvre 4 courbes superposées (Production, AutoConso, Revente, Achat) avec couleurs distinctes
+* Affichage forcé en lignes (au lieu de aires) pour une meilleure lisibilité
+* Activation de l'historisation sur toutes les commandes numériques
+* Configuration du mode d'archivage (`historizeMode: avg`) pour la compaction des données anciennes
+* Correction des balises `<sup>` mal fermées dans le template
+* Correction de la persistance du bouton refresh après mise à jour du widget (délégation d'événements)
+
+## 8 août 2023
+* Mise à jour initiale
