@@ -191,6 +191,18 @@
   opacity: 0.3;
   margin-left: 4px;
 }
+.eqLogic-widget[data-eqType="datamanager"] .cmds {
+  overflow: visible !important;
+  height: auto !important;
+}
+.fronius .cmd.cursor,
+.consos .cmd.cursor {
+  cursor: pointer;
+}
+.fronius .cmd.cursor:hover,
+.consos .cmd.cursor:hover {
+  opacity: 0.7;
+}
 .consos .production > span {
   color: var(--sunColor) !important;
 }
@@ -199,4 +211,11 @@
 }
 .consos .revente span {
   color: var(--resellColor) !important;
+}
+div.eqLogic-widget[data-eqType="datamanager"] .btn-history {
+  margin-top: 1px;
+}
+div.eqLogic-widget[data-eqType="datamanager"] .btn-history i {
+  color: var(--eqTitle-color) !important;
+  font-size: 12px !important;
 }

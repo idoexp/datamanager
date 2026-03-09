@@ -19,36 +19,7 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class datamanager extends eqLogic {
-  /*     * *************************Attributs****************************** */
 
-  /*
-  * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
-  * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
-  public static $_widgetPossibility = array();
-  */
-
-  /*
-  * Permet de crypter/décrypter automatiquement des champs de configuration du plugin
-  * Exemple : "param1" & "param2" seront cryptés mais pas "param3"
-  public static $_encryptConfigKey = array('param1', 'param2');
-  */
-
-  /*     * ***********************Methode static*************************** */
-
-  /*
-  * Fonction exécutée automatiquement toutes les minutes par Jeedom
-    public static function cron() {
-    foreach (self::byType('datamanager') as $eqlogic) {//parcours tous les équipements du plugin fronius
-      if ($eqlogic->getIsEnable() == 1) {//vérifie que l'équipement est actif
-        $cmd = $eqlogic->getCmd(null, 'refresh');//retourne la commande "refresh si elle existe
-        if (!is_object($cmd)) {//Si la commande n'existe pas
-          continue; //continue la boucle
-        }
-        $cmd->execCmd(); // la commande existe on la lance
-      }
-    }
-    }
-  */
   public static function cron() {
       foreach (self::byType('datamanager') as $eqlogic) {
           if ($eqlogic->getIsEnable() == 1) {
@@ -63,36 +34,6 @@ class datamanager extends eqLogic {
   }
 
 
-
-  /*
-  * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-  public static function cron5() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-  public static function cron10() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-  public static function cron15() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-  public static function cron30() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement toutes les heures par Jeedom
-  public static function cronHourly() {}
-  */
-
-  /*
-  * Fonction exécutée automatiquement tous les jours par Jeedom
-  public static function cronDaily() {}
-  */
 
   /*     * *********************Méthodes d'instance************************* */
 
@@ -117,6 +58,20 @@ class datamanager extends eqLogic {
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
   public function preSave() {
+    $ip = $this->getConfiguration('datamanager_ip');
+    if (!empty($ip)) {
+      // Vérifier que l'adresse ne contient pas de caractères dangereux
+      if (preg_match('/[;\|&`\$]/', $ip)) {
+        throw new Exception(__("L'adresse de l'onduleur contient des caractères non autorisés", __FILE__));
+      }
+    }
+    $port = $this->getConfiguration('datamanager_port');
+    if (!empty($port)) {
+      $portInt = intval($port);
+      if ($portInt < 1 || $portInt > 65535 || strval($portInt) !== $port) {
+        throw new Exception(__("Le port doit être un nombre entre 1 et 65535", __FILE__));
+      }
+    }
   }
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
@@ -135,6 +90,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setIsHistorized(1);
     $info->setOrder(1);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
     
     $info = $this->getCmd(null, 'daily_cumulativeConsumption');
@@ -150,6 +108,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(2);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'daily_cumulativeImport');
@@ -165,6 +126,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(3);
+    $info->setDisplay('graphColor', '#d1d3d3');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'daily_cumulativeExport');
@@ -180,6 +145,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(3);
+    $info->setDisplay('graphColor', '#47ac34');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'daily_autoconsomation');
@@ -195,6 +164,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(4);
+    $info->setDisplay('graphColor', '#25b2e8');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'lastRefresh');
@@ -223,8 +196,10 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setOrder(5);
     $info->setIsHistorized(1);
-    // $info->setConfiguration("minValue", 0);
-    // $info->setConfiguration("maxValue", config::byKey('global_fronius_wc', 'datamanager'));
+    $info->setDisplay('graphColor', '#fed308');
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_day_energy');
@@ -240,6 +215,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(0);
     $info->setIsHistorized(1);
     $info->setOrder(8);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_year_energy');
@@ -253,7 +231,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('Wh');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(9);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_total_energy');
@@ -267,7 +247,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('Wh');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(10);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_uac');
@@ -281,7 +263,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('V');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(11);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_udc');
@@ -295,7 +279,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('V');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(12);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
 
@@ -310,7 +296,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('A');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(13);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_idc');
@@ -324,7 +312,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('A');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(14);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_fac');
@@ -338,7 +328,9 @@ class datamanager extends eqLogic {
     $info->setSubType('numeric');
     $info->setUnite('Hz');
     $info->setIsVisible(0);
+    $info->setIsHistorized(1);
     $info->setOrder(15);
+    $info->setConfiguration('historizeMode', 'avg');
     $info->save();
 
     $info = $this->getCmd(null, 'fronius_powerreal_p_sum');
@@ -354,6 +346,9 @@ class datamanager extends eqLogic {
     $info->setIsVisible(1);
     $info->setIsHistorized(1);
     $info->setOrder(16);
+    $info->setDisplay('graphType', 'line');
+    $info->setConfiguration('historizeMode', 'avg');
+    $info->setConfiguration('historizeRound', 2);
     $info->save();
 
 
@@ -367,7 +362,7 @@ class datamanager extends eqLogic {
     $refresh->setLogicalId('refresh');
     $refresh->setType('action');
     $refresh->setSubType('other');
-    $info->setOrder(1);
+    $refresh->setOrder(1);
     $refresh->save();  
 
     $info = $this->getCmd(null, 'debug_json');
@@ -392,103 +387,60 @@ class datamanager extends eqLogic {
   public function postRemove() {
   }
 
-  /*
-  * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
-  * Exemple avec le champ "Mot de passe" (password)
-  public function decrypt() {
-    $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
-  }
-  public function encrypt() {
-    $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-  }
-  */
-
-  /*
-  * Permet de modifier l'affichage du widget (également utilisable par les commandes)
-  public function toHtml($_version = 'dashboard') {}
-  */
-
-  /*
-  * Permet de déclencher une action avant modification d'une variable de configuration du plugin
-  * Exemple avec la variable "param3"
-  public static function preConfig_param3( $value ) {
-    // do some checks or modify on $value
-    return $value;
-  }
-  */
-
-  /*
-  * Permet de déclencher une action après modification d'une variable de configuration du plugin
-  * Exemple avec la variable "param3"
-  public static function postConfig_param3($value) {
-    // no return value
-  }
-  */
-
   /*     * **********************Getteur Setteur*************************** */
   public function updateFroniusDatamanagerInfos() {
     log::add('datamanager', 'info', "Récupération des données sur l'onduleur.");
-    $getGetInverterRealtimeData   = $this->getGetInverterRealtimeData();
-    $pac = $getGetInverterRealtimeData->Body->Data->PAC->Value;
 
-    $this->checkAndUpdateCmd('fronius_pac', $pac);
-    $this->checkAndUpdateCmd('fronius_day_energy', $getGetInverterRealtimeData->Body->Data->DAY_ENERGY->Value);
-    $this->checkAndUpdateCmd('fronius_year_energy', $getGetInverterRealtimeData->Body->Data->YEAR_ENERGY->Value);
-    $this->checkAndUpdateCmd('fronius_total_energy', $getGetInverterRealtimeData->Body->Data->TOTAL_ENERGY->Value);
+    try {
+    // Récupération des données onduleur (peut être indisponible la nuit)
+    $pac = 0;
+    $getGetInverterRealtimeData = $this->getGetInverterRealtimeData();
+    if ($getGetInverterRealtimeData !== false && isset($getGetInverterRealtimeData->Body->Data->PAC->Value)) {
+      $pac = $getGetInverterRealtimeData->Body->Data->PAC->Value;
+      $this->checkAndUpdateCmd('fronius_pac', $pac);
+      $this->checkAndUpdateCmd('fronius_day_energy', $getGetInverterRealtimeData->Body->Data->DAY_ENERGY->Value);
+      $this->checkAndUpdateCmd('fronius_year_energy', $getGetInverterRealtimeData->Body->Data->YEAR_ENERGY->Value);
+      $this->checkAndUpdateCmd('fronius_total_energy', $getGetInverterRealtimeData->Body->Data->TOTAL_ENERGY->Value);
+      $this->checkAndUpdateCmd('fronius_fac', $getGetInverterRealtimeData->Body->Data->FAC->Value);
+      $this->checkAndUpdateCmd('fronius_iac', $getGetInverterRealtimeData->Body->Data->IAC->Value);
+      $this->checkAndUpdateCmd('fronius_idc', $getGetInverterRealtimeData->Body->Data->IDC->Value);
+      $this->checkAndUpdateCmd('fronius_uac', $getGetInverterRealtimeData->Body->Data->UAC->Value);
+      $this->checkAndUpdateCmd('fronius_udc', $getGetInverterRealtimeData->Body->Data->UDC->Value);
+    } else {
+      log::add('datamanager', 'debug', "Onduleur indisponible, production mise à 0");
+      $this->checkAndUpdateCmd('fronius_pac', 0);
+    }
 
-    $this->checkAndUpdateCmd('fronius_fac', $getGetInverterRealtimeData->Body->Data->FAC->Value);
-    $this->checkAndUpdateCmd('fronius_iac', $getGetInverterRealtimeData->Body->Data->IAC->Value);
-    $this->checkAndUpdateCmd('fronius_idc', $getGetInverterRealtimeData->Body->Data->IDC->Value);
-    $this->checkAndUpdateCmd('fronius_uac', $getGetInverterRealtimeData->Body->Data->UAC->Value);
-    $this->checkAndUpdateCmd('fronius_udc', $getGetInverterRealtimeData->Body->Data->UDC->Value);
-
-    $getGetMeterRealtimeData        = $this->getGetMeterRealtimeData();
-    $data                           = $getGetMeterRealtimeData->Body->Data;
-    $firstData                      = current($data);
+    // Récupération des données SmartMeter (consommation, achat, revente)
+    $getGetMeterRealtimeData = $this->getGetMeterRealtimeData();
+    if ($getGetMeterRealtimeData === false || !isset($getGetMeterRealtimeData->Body->Data)) {
+      log::add('datamanager', 'debug', "SmartMeter indisponible");
+      return;
+    }
+    $data      = $getGetMeterRealtimeData->Body->Data;
+    $firstData = current($data);
     $powerReal_P_Sum                = floatval($firstData->PowerReal_P_Sum);
     $instantaneousConsumptionWatts  = $pac + $powerReal_P_Sum;
 
     $this->checkAndUpdateCmd('fronius_powerreal_p_sum', $powerReal_P_Sum);
-
     $this->checkAndUpdateCmd('home_instant_consomation', $instantaneousConsumptionWatts);
-
     $this->checkAndUpdateCmd('debug_json', json_encode($firstData));       
 
 
 
     $currentTimestamp      = time();
 
-    $lastRefresh    = $this->getCmd(null,'lastRefresh')->execCmd();
+    $lastRefresh = (int)$this->getCmd(null,'lastRefresh')->execCmd();
     if ($lastRefresh === 0){
-      $lastRefresh    = time() - 2;
+      $lastRefresh = time() - 2;
     }
 
-    $daily_cumulativeConsumption    = $this->getCmd(null,'daily_cumulativeConsumption')->execCmd();
-    if ($daily_cumulativeConsumption === 0){
-      $daily_cumulativeConsumption    = 0;
-    }
-
-    $daily_cumulativeImport    = $this->getCmd(null,'daily_cumulativeImport')->execCmd();
-    if ($daily_cumulativeImport === 0){
-      $daily_cumulativeImport    = 0;
-    }
-
-    $daily_cumulativeExport    = $this->getCmd(null,'daily_cumulativeExport')->execCmd();
-    if ($daily_cumulativeExport === 0){
-      $daily_cumulativeExport    = 0;
-    }
-    
-    $daily_autoconsomation    = $this->getCmd(null,'daily_autoconsomation')->execCmd();
-    if ($daily_autoconsomation === 0){
-      $daily_autoconsomation    = 0;
-    }
+    $daily_cumulativeConsumption = (float)$this->getCmd(null,'daily_cumulativeConsumption')->execCmd();
+    $daily_cumulativeImport     = (float)$this->getCmd(null,'daily_cumulativeImport')->execCmd();
+    $daily_cumulativeExport     = (float)$this->getCmd(null,'daily_cumulativeExport')->execCmd();
+    $daily_autoconsomation      = (float)$this->getCmd(null,'daily_autoconsomation')->execCmd();
 
     $timeDifference = $currentTimestamp - $lastRefresh;
-    // log::add('datamanager', 'info', "Calcul de la conso");
-    // log::add('datamanager', 'info', "Delta $timeDifference secondes");
-
-    // log::add('datamanager', 'info', "Conso instantanée: $instantaneousConsumptionWatts Watts");
-    // log::add('datamanager', 'info', "lastRefresh : ".$lastRefresh);
 
     if ($lastRefresh > 0) {
         // Consomation journalière en kWh
@@ -510,63 +462,58 @@ class datamanager extends eqLogic {
           $daily_autoconsomation += ($instantAuto * $timeDifference) / 3600; // Convert seconds to hours Wh
         }
         
-        // Remise à zéro des compteurs à minuit
-        $currentHour    = date('H', $currentTimestamp);   // Heure (format 24 heures)
-        $currentMinute  = date('i', $currentTimestamp); // Minutes
-        $currentSecond  = date('s', $currentTimestamp); // Secondes
-
-        $isMidnight = ($currentHour === '00' && $currentMinute === '00' && intval($currentSecond) <= 10);
-        if ($isMidnight) {
-            $daily_cumulativeConsumption  = $daily_autoconsomation = $daily_cumulativeImport = $daily_cumulativeExport  = 0;
-        }
-
-
         log::add('datamanager', 'info', "Conso global : $daily_cumulativeConsumption kWh");
         $this->checkAndUpdateCmd('daily_cumulativeConsumption', $daily_cumulativeConsumption);
         $this->checkAndUpdateCmd('daily_cumulativeImport', $daily_cumulativeImport);
         $this->checkAndUpdateCmd('daily_cumulativeExport', $daily_cumulativeExport);
         $this->checkAndUpdateCmd('daily_autoconsomation', $daily_autoconsomation);
+
+        // Remise à zéro des compteurs à minuit (fenêtre de 90s pour ne pas rater le cron)
+        $currentHour   = date('H', $currentTimestamp);
+        $currentMinute = date('i', $currentTimestamp);
+        $isMidnight = ($currentHour === '00' && $currentMinute === '00');
+        if ($isMidnight) {
+            log::add('datamanager', 'info', "Reset des compteurs journaliers (minuit)");
+            $this->checkAndUpdateCmd('daily_cumulativeConsumption', 0);
+            $this->checkAndUpdateCmd('daily_cumulativeImport', 0);
+            $this->checkAndUpdateCmd('daily_cumulativeExport', 0);
+            $this->checkAndUpdateCmd('daily_autoconsomation', 0);
+        }
     }
     $this->checkAndUpdateCmd('lastRefresh', $currentTimestamp);
     $this->toHtml();
+
+    } catch (Exception $e) {
+      log::add('datamanager', 'error', "Erreur lors de la mise à jour : " . $e->getMessage());
+    }
   }
 
 
   public function getEndpoint(){
-      $protocole    = $this->getConfiguration('datamanager_protocole') == "http" ? "http://" : "http://";
-      $port         = $this->getConfiguration('datamanager_port');
-      $port         = isset($port) && !empty($port) ? ":".$port : "";
-      $url            = $protocole . $this->getConfiguration('datamanager_ip').$port;
-      // log::add('datamanager', 'info', "Url d'accès : ".$url);
-      return $url;
+      $protocole = $this->getConfiguration('datamanager_protocole') == "https" ? "https://" : "http://";
+      $port      = $this->getConfiguration('datamanager_port');
+      $port      = !empty($port) ? ":".$port : "";
+      return $protocole . $this->getConfiguration('datamanager_ip') . $port;
   }
 
   public function getGetInverterRealtimeData(){
     $urlEndpoint = $this->getEndpoint();
-    // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
     $urlApi = $urlEndpoint."/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceId=1&DataCollection=CommonInverterData";
     $InverterRealtimeData = $this->getJson($urlApi);
-    // log::add('datamanager', 'debug', "Récupération des informations");
-    // log::add('datamanager', 'debug', "URL : ". $urlApi);
     if($InverterRealtimeData === false){
-      // $InverterRealtimeData = json_decode('{"PARAM_NB_J_BLANC":"NA","PARAM_NB_J_ROUGE":"NA","PARAM_NB_J_BLEU":"NA"}');
-      log::add('datamanager', 'error', "Erreur de récupération de InverterRealtimeData");
+      log::add('datamanager', 'debug', "Impossible de joindre l'onduleur");
     }
-    return  $InverterRealtimeData;
+    return $InverterRealtimeData;
   }
 
   public function getGetMeterRealtimeData(){
     $urlEndpoint = $this->getEndpoint();
-    // $global_fronius_ip = config::byKey('global_fronius_ip', 'datamanager');
     $urlApi = $urlEndpoint."/solar_api/v1/GetMeterRealtimeData.cgi?Scope=System";
     $GetMeterRealtimeData = $this->getJson($urlApi);
-    // log::add('datamanager', 'debug', "Récupération des informations du SmartMeter");
-    // log::add('datamanager', 'debug', "URL : ". $urlApi);
     if($GetMeterRealtimeData === false){
-      // $GetMeterRealtimeData = json_decode('{"PARAM_NB_J_BLANC":"NA","PARAM_NB_J_ROUGE":"NA","PARAM_NB_J_BLEU":"NA"}');
-      log::add('datamanager', 'error', "Erreur de récupération de GetMeterRealtimeData");
+      log::add('datamanager', 'debug', "Impossible de joindre le SmartMeter");
     }
-    return  $GetMeterRealtimeData;
+    return $GetMeterRealtimeData;
   }
 
   public function getJson($url){
@@ -581,9 +528,9 @@ class datamanager extends eqLogic {
       $data           = curl_exec($curl);
       $httpRespCode   = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-      log::add('datamanager', 'debug', "Réponse HHTP : ". $httpRespCode);
+      log::add('datamanager', 'debug', "Réponse HTTP : ". $httpRespCode);
       if ($httpRespCode == 0) {
-        log::add('datamanager', 'error', "Impossible de récupérer les données : ". curl_error($curl));
+        log::add('datamanager', 'debug', "Connexion impossible : ". curl_error($curl));
         return false;
       }
   
@@ -640,7 +587,7 @@ class datamanager extends eqLogic {
     foreach ($commandsToReplace as $commandName) {
       $cmd = $this->getCmd(null, $commandName);
       if (is_object($cmd) && $cmd->getType() == 'info') {
-        $commandValue = $cmd->execCmd();
+        $commandValue = (float)$cmd->execCmd();
 
         if ($commandName == "home_instant_consomation"){
           $consoInstant = $commandValue;
@@ -662,17 +609,20 @@ class datamanager extends eqLogic {
         $w = $this->convertToReadablePower($commandValue);
         $replace["#".$commandName."_unite#"] = $w['unite'];
         $replace["#".$commandName."#"] = $w['value'];
+        $replace["#".$commandName."_id#"] = $cmd->getId();
 
       } else {
         $replace['#' . $commandName . '#'] = 'Valeur indisponible';
       }
     }
 
-    // $maxWC =config::byKey('global_fronius_wc', __CLASS__);
-    $maxWC =$this->getConfiguration('datamanager_puissance');
+    $maxWC = (float)$this->getConfiguration('datamanager_puissance');
+    if ($maxWC <= 0) {
+      $maxWC = 1; // Éviter la division par zéro
+    }
 
     $replace["#sunCurrentSpeed#"]   = ($solarProductionW * 100 )/ $maxWC;
-    
+
     $replace["#houseCurrentSpeed#"] = ($consoInstant * 100 )/ $maxWC;
     if ($solarExport < 0){
       $replace["#houseCurrentSpeed#"] = ( ($solarProductionW - $consoInstant) * 100 )/ $maxWC;
@@ -682,6 +632,7 @@ class datamanager extends eqLogic {
   }
 
   function convertToReadablePower($valueInWatts) {
+      $valueInWatts = (float)$valueInWatts;
       $units = array('W', 'kW', 'MW', 'GW', 'TW', 'PW'); // Unités possibles
       $magnitude = 0;
       while ($valueInWatts >= 1000 && $magnitude < count($units) - 1) {
@@ -696,25 +647,7 @@ class datamanager extends eqLogic {
 }
 
 class datamanagerCmd extends cmd {
-  /*     * *************************Attributs****************************** */
 
-  /*
-  public static $_widgetPossibility = array();
-  */
-
-  /*     * ***********************Methode static*************************** */
-
-
-  /*     * *********************Methode d'instance************************* */
-
-  /*
-  * Permet d'empêcher la suppression des commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-  public function dontRemoveCmd() {
-    return true;
-  }
-  */
-
-  // Exécution d'une commande
   public function execute($_options = array()) {
       $eqlogic = $this->getEqLogic();
       switch ($this->getLogicalId()) {
@@ -724,8 +657,4 @@ class datamanagerCmd extends cmd {
               $eqlogic->refreshWidget();         
       }
   }
-
-
-  /*     * **********************Getteur Setteur*************************** */
-
 }

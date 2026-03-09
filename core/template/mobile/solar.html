@@ -3,13 +3,14 @@
     <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh_id#">
       <i class="fas fa-sync"></i>
     </span>
+    <span class="btn-history pull-right cursor tippied" style="margin-right:5px;opacity:0.6;" data-title="Historique">
+      <i class="fas fa-chart-line"></i>
+    </span>
     <span>#name_display#
       <span class="object_name">#object_name#</span>
-    </span>    
-
+    </span>
   </center>
 
- 
     <div class="cmds #isVerticalAlign#">
  <center>
       <div class="fronius"  style="--sunCurrentSpeed:#sunCurrentSpeed#;--houseCurrentSpeed:#houseCurrentSpeed#;">
@@ -28,7 +29,7 @@
                 <path d="m.67,10.35c.35.27.62.62.83,1,.33.61.46,1.26.39,1.95-.05.53-.24,1.02-.52,1.47-.01.02-.01.05-.02.07.02,0,.05.01.07.01.22.02.44.03.66.05.69.07,1.28.36,1.77.83.75.7,1.13,1.57,1.09,2.6,0,.04,0,.09,0,.16.15-.11.3-.18.45-.26L15.89,4.02s-.04-.03-.05-.04c-.73-.72-1.05-1.61-.97-2.66-.88.58-1.81.74-2.79.48-.98-.26-1.71-.87-2.17-1.79-.47.93-1.2,1.54-2.18,1.8-.98.25-1.91.11-2.78-.47,0,.09,0,.16,0,.23,0,.2,0,.4-.03.59-.17.92-.64,1.66-1.4,2.2-.3.22-.64.38-1,.48-.35.1-.71.13-1.08.12-.03,0-.07,0-.11,0,.55.86.74,1.78.47,2.77-.27.98-.87,1.71-1.8,2.17.04.03.07.05.1.07.19.12.39.24.57.37Z"  fill="currentColor" />
               </g>
             </svg>
-            <div class="consoTxt production">#fronius_pac#<sup>#fronius_pac_unite#<sup></div>
+            <div class="consoTxt production cmd cursor" data-cmd_id="#fronius_pac_id#">#fronius_pac#<sup>#fronius_pac_unite#</sup></div>
         </div>
 
         <div class="icon house animated #reverseWay#">
@@ -46,7 +47,7 @@
               <polygon  fill="currentColor"   points="22.5 10.68 15.74 17.01 19.41 10.34 17.56 10 18.85 7.81 14 4 3 12.64 3 26 12 26 12 18 16 18 16 26 25 26 25 12.64 22.5 10.68"/>
             </g>
           </svg>
-          <div class="consoTxt consomation">#home_instant_consomation#<sup>#home_instant_consomation_unite#<sup></div>
+          <div class="consoTxt consomation cmd cursor" data-cmd_id="#home_instant_consomation_id#">#home_instant_consomation#<sup>#home_instant_consomation_unite#</sup></div>
         </div>
 
         <div class="icon grid">
@@ -63,35 +64,63 @@
               <polygon  fill="currentColor"  opacity="0.5" points="9.02 0 15.07 .06 19.86 2.59 19.86 4.02 3.96 4.02 3.96 2.7 9.02 0"/>
             </g>
           </svg>
-          <div class="consoTxt reseau">#fronius_powerreal_p_sum#<sup>#fronius_powerreal_p_sum_unite#</sup></div>
+          <div class="consoTxt reseau cmd cursor" data-cmd_id="#fronius_powerreal_p_sum_id#">#fronius_powerreal_p_sum#<sup>#fronius_powerreal_p_sum_unite#</sup></div>
         </div>
       </div>
 
       <div class="consos">
-        <div class="production">
-          Production <span>#fronius_day_energy#<sup>#fronius_day_energy_unite#h</sup></span>
+        <div class="production cmd cursor" data-cmd_id="#fronius_day_energy_id#">
+          Production <span>#fronius_day_energy#<sup>#fronius_day_energy_unite#</sup></span>
         </div>
-        <div class="autoconso">
-          AutoConso <span>#daily_autoconsomation#<sup>#daily_autoconsomation_unite#h</sup></span>
+        <div class="autoconso cmd cursor" data-cmd_id="#daily_autoconsomation_id#">
+          AutoConso <span>#daily_autoconsomation#<sup>#daily_autoconsomation_unite#</sup></span>
         </div>
-        <div class="achat">
-          Achat <span>#daily_cumulativeImport#<sup>#daily_cumulativeImport_unite#h</sup></span>
+        <div class="achat cmd cursor" data-cmd_id="#daily_cumulativeImport_id#">
+          Achat <span>#daily_cumulativeImport#<sup>#daily_cumulativeImport_unite#</sup></span>
         </div>
-        <div class="revente">
-          Revente <span>#daily_cumulativeExport#<sup>#daily_cumulativeExport_unite#h</sup></span>
+        <div class="revente cmd cursor" data-cmd_id="#daily_cumulativeExport_id#">
+          Revente <span>#daily_cumulativeExport#<sup>#daily_cumulativeExport_unite#</sup></span>
         </div>
       </div>
-  </center>  
+  </center>
     </div>
 </div>
 
 <link href="/plugins/datamanager/desktop/css/datamanager.css" rel="stylesheet">
 <script>
   if ('#refresh_id#' != '') {
-    $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
-      jeedom.cmd.execute({id: '#refresh_id#'})
-    })
+    $(document).off('click.dm_refresh touchend.dm_refresh', '.eqLogic[data-eqLogic_uid=#uid#] .refresh')
+      .on('click.dm_refresh touchend.dm_refresh', '.eqLogic[data-eqLogic_uid=#uid#] .refresh', function (e) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        jeedom.cmd.execute({id: '#refresh_id#'});
+      });
   } else {
-   $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove()
+    $('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
   }
+
+  function openSolarHistoryMobile(e) {
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    var multiIds = '#fronius_pac_id#-#daily_autoconsomation_id#-#daily_cumulativeExport_id#-#daily_cumulativeImport_id#';
+    var today = new Date();
+    var startDate = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+    var endDate = startDate;
+    var url = 'index.php?v=d&modal=cmd.history&id=' + multiIds + '&startDate=' + startDate + ' 00:00:00&endDate=' + endDate + ' 23:59:59';
+    if (typeof jeeDialog !== 'undefined') {
+      jeeDialog.dialog({
+        id: 'md_cmdHistory',
+        title: "Historique - Production / AutoConso / Revente / Achat",
+        contentUrl: url
+      });
+    } else if ($('#md_modal').length) {
+      $('#md_modal').dialog({title: "Historique"}).load(url).dialog('open');
+    }
+  }
+
+  $(document).off('click.dm_hist touchend.dm_hist', '.eqLogic[data-eqLogic_uid=#uid#] .btn-history')
+    .on('click.dm_hist touchend.dm_hist', '.eqLogic[data-eqLogic_uid=#uid#] .btn-history', openSolarHistoryMobile);
+
+  $(document).off('click.dm_cmd touchend.dm_cmd', '.eqLogic[data-eqLogic_uid=#uid#] .cmd.cursor[data-cmd_id]:not(.refresh)')
+    .on('click.dm_cmd touchend.dm_cmd', '.eqLogic[data-eqLogic_uid=#uid#] .cmd.cursor[data-cmd_id]:not(.refresh)', openSolarHistoryMobile);
 </script>

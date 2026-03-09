@@ -19,12 +19,6 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
 function datamanager_install() {
-	// $global_fronius_ip 		= 'MON_IP';
-	// $global_fronius_wc 		= '7560';
-	// config::save('global_fronius_ip', $global_fronius_ip, 'datamanager');
-	// config::save('global_fronius_wc', $global_fronius_wc, 'datamanager');
-	// log::add('datamanager', 'info', "Installation des valeurs par défaut.");
-	$this->register->add($this->table, 'lastUpdateTimestamp', 'bigint', '0', 'null');
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin

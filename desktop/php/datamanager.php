@@ -159,6 +159,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
 										<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="datamanager_puissance" placeholder="{{Puissance de l'installation en Wc}}">
 									</div>
 								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">{{Test de connexion}}</label>
+									<div class="col-sm-4">
+										<a class="btn btn-default" id="bt_testConnection"><i class="fas fa-plug"></i> {{Tester}}</a>
+										<span id="testConnectionResult" style="margin-left:10px;"></span>
+									</div>
+								</div>
 
 						</div>
 

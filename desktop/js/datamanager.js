@@ -16,6 +16,36 @@
 * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* Bouton test de connexion */
+$('#bt_testConnection').on('click', function () {
+  var eqId = $('.eqLogicAttr[data-l1key=id]').value()
+  if (!eqId) {
+    $('#div_alert').showAlert({message: '{{Veuillez d\'abord sauvegarder l\'équipement}}', level: 'warning'})
+    return
+  }
+  $('#testConnectionResult').html('<i class="fas fa-spinner fa-spin"></i> {{Test en cours...}}')
+  $.ajax({
+    type: 'POST',
+    url: 'plugins/datamanager/core/ajax/datamanager.ajax.php',
+    data: {
+      action: 'testConnection',
+      id: eqId,
+      jeedom_token: JEEDOM_AJAX_TOKEN
+    },
+    dataType: 'json',
+    error: function (request, status, error) {
+      $('#testConnectionResult').html('<span style="color:red;"><i class="fas fa-times"></i> {{Erreur réseau}}</span>')
+    },
+    success: function (data) {
+      if (data.state != 'ok') {
+        $('#testConnectionResult').html('<span style="color:red;"><i class="fas fa-times"></i> ' + data.result + '</span>')
+      } else {
+        $('#testConnectionResult').html('<span style="color:green;"><i class="fas fa-check"></i> ' + data.result + '</span>')
+      }
+    }
+  })
+})
+
 /* Permet la réorganisation des commandes dans l'équipement */
 $("#table_cmd").sortable({
   axis: "y",

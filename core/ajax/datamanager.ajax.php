@@ -23,16 +23,28 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
-  /* Fonction permettant l'envoi de l'entête 'Content-Type: application/json'
-    En V3 : indiquer l'argument 'true' pour contrôler le token d'accès Jeedom
-    En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
-  */
     ajax::init();
 
-
+    if (init('action') == 'testConnection') {
+        $eqLogicId = init('id');
+        $eqLogic = eqLogic::byId($eqLogicId);
+        if (!is_object($eqLogic) || $eqLogic->getEqType_name() != 'datamanager') {
+            throw new Exception(__('Équipement introuvable', __FILE__));
+        }
+        $endpoint = $eqLogic->getEndpoint();
+        $url = $endpoint . "/solar_api/v1/GetInverterRealtimeData.cgi?Scope=Device&DeviceId=1&DataCollection=CommonInverterData";
+        $result = $eqLogic->getJson($url);
+        if ($result === false) {
+            throw new Exception(__('Connexion échouée : impossible de joindre l\'onduleur à ', __FILE__) . $endpoint);
+        }
+        if (!isset($result->Body->Data->PAC)) {
+            throw new Exception(__('Connexion établie mais réponse inattendue de l\'onduleur (il est peut-être en veille)', __FILE__));
+        }
+        $pac = $result->Body->Data->PAC->Value;
+        ajax::success(__('Connexion réussie ! Production actuelle : ', __FILE__) . $pac . 'W');
+    }
 
     throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
-    /*     * *********Catch exeption*************** */
 }
 catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
