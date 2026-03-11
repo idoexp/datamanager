@@ -2,9 +2,9 @@
 	"id" : "datamanager",
 	"name" : "Fronius Datamanager",
 	"description" : {
-		"fr_FR": "Récupération des données du Datamanager 2.0 de Fronius et du Smart Meter"
+		"fr_FR": "Suivi en temps réel de votre installation solaire Fronius. Récupère les données de l'onduleur (production instantanée, énergie journalière) et du Smart Meter (consommation, import/export réseau) via le Datamanager 2.0. Affiche un widget animé avec les flux d'énergie, l'autoconsommation et les historiques graphiques."
 	},
-	"utilization": "Installez le plugin, activez le. Créez un équipement, indiquez son adresse IP et sauvegardez. ",
+	"utilization": "Installez et activez le plugin. Créez un équipement, renseignez l'adresse IP de votre onduleur Fronius ainsi que la puissance crête de votre installation (en Wc), puis sauvegardez. Les données sont actualisées automatiquement chaque minute. Le widget affiche la production solaire, la consommation de la maison et les échanges avec le réseau. Cliquez sur les valeurs ou sur l'icône graphique pour consulter l'historique du jour. Attention : la synchronisation ayant lieu toutes les minutes (et non 60 fois par seconde comme le Datamanager), des écarts de calcul sont possibles. La consommation et l'autoconsommation sont calculées en delta entre deux synchronisations.",
 	"link": {
 		"forum": "https://community.jeedom.com/t/recuperation-des-donnees-de-productions-solaire-dune-installation-fronius/110533"
 	},
